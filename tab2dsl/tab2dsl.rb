@@ -63,13 +63,23 @@ OptionParser.new do |opts|
   opts.on('-t', '--to-lang LANG', 'Name of target language') { |v| options[:to_lang] = v }
   opts.on('-s', '--stoplist LANG', 'Specify a stoplist language to filter keywords') { |v| options[:stoplist] = v }
   opts.on('-S', '--stop-dir DIR', 'Specify path of stoplist directory') { |v| options[:stopdir] = v }
+  opts.on('-o', '--output OUTPUT', 'Specify output filepath to store output') { |v| options[:output] = v }
 
 end.parse!
 
 if ARGV[0] then dict_source = ARGV[0] end
 
 tab_data = read_dict_source(dict_source)
-dsl_name = get_dict_name(dict_source)
+file_name = File.basename(dict_source, File.extname(dict_source)) #=> "filename"
+
+output = options[:output]
+
+if output
+  dsl_name = File.join(File.dirname(output), File.basename(output, File.extname(output)))
+else
+  dsl_name = get_dict_name(dict_source)
+end
+
 header_stuff = get_header(options)
 dict_content = format_dictionary(tab_data)
 
