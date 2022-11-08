@@ -35,15 +35,33 @@ end
 
 def format_dictionary(tab_data)
   dict_content = ""
-
+  mycount = 1
   tab_data.each_line do |line|
+    p mycount
+    p line
+    mycount = mycount + 1
     if skip_lines(line)
       next
     end
     if line.include? "\t"
       line = line.gsub(/\[/, "\\[").gsub(/\]/, "\\]")
-
+      
       tab1,tab2 = line.chomp.split("\t")
+
+      unless tab1.nil? || tab1.empty?
+        tab1 = tab1.strip
+      end
+
+      unless tab2.nil? || tab2.empty?
+        tab2 = tab2.strip
+      end
+
+      if tab1.nil? or tab2.nil? or tab1.empty? or tab2.empty? 
+        p "Warning: Empty values"
+        p line
+        next
+      end
+
       tab2_format = tab2.gsub(tab1, "[i]~[/i]")
       dict_entry = tab1 + "\n" + tab2 + "\n\t[m1][b]" + tab1 + "[/b][/m]\n\t[m1]" + tab2_format + "[/m]\n\n"
       dict_content << dict_entry
