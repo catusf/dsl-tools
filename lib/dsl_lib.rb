@@ -65,6 +65,11 @@ def skip_lines(line)
   if line.match(/^\t/)
     skip = true
   end
+  if line.scan(/\t/).length != 1
+    p "Warning: Invalid line => " + line
+    skip = false
+  end
+
   skip
 end
 
